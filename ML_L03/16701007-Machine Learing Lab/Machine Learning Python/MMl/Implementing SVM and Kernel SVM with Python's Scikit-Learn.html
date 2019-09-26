@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Implementing SVM and Kernel SVM with Python&#x27;s Scikit-Learn</title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+	<!-- fav icons -->
+	<!--<link rel="shortcut icon" href="/assets/images/favicon.ico?v=98cf46a323">-->
+	<link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png?v=98cf46a323">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/images/apple-touch-icon-72x72.png?v=98cf46a323">
+	<link rel="apple-touch-icon" sizes="114x114" href="/assets/images/apple-touch-icon-114x114.png?v=98cf46a323">
+    <!-- header scripts -->
+    <script type="text/javascript" src="//cdn.thisiswaldo.com/static/js/3873.js"></script>
+	<!-- stylesheets -->
+    <link href="//fonts.googleapis.com/css?family=Nunito:400,400i,700,700i" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=98cf46a323">
+	<link rel="stylesheet" href="/assets/css/font-awesome.min.css?v=98cf46a323">
+	<link rel="stylesheet" type="text/css" href="/assets/css/screen.css?v=98cf46a323">
+	<link rel="stylesheet" type="text/css" href="/assets/css/hl-styles/atom_one_dark.css?v=98cf46a323">
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+	<script>
+/*====================================================
+  THEME SETTINGS & GLOBAL VARIABLES
+====================================================*/
+//  1. Disqus comment settings
+var disqus_shortname = 'stackabuse'; // required: replace example with your forum shortname
+
+//	2. Sidebar Position
+var sidebar_left = false; // Set true or flase for positioning sidebar on left
+
+//  3. Recent Post count
+var recent_post_count = 3;
+
+//	4. Google+ badge settings
+var badge_type = 'page'; // person / page / community ----- three type of google badge
+var google_plus_url = 'https://plus.google.com/111813546240107028721';
+
+//	5. Facebook Page Setting
+var facebook_page_url = 'https://www.facebook.com/stackabuse';
+
+//	6. Twitter Setting
+var twitter_url = 'https://twitter.com/ScottWRobinson';
+var twitter_widget_id = '722928793669607425';
+var number_of_tweet = 3;
+
+//	7. Mailchimp signup form Setting
+var mailchimp_form_url = '//stackabuse.us10.list-manage.com/subscribe/post?u=90b216fdbe02b25619ec94fc3&amp;id=bc2bb312cd';
+var success_message = "Please check your inbox and confirm your email address. Thank you!";
+
+//	8. Flickr Setting
+//var flickr_id = '52617155@N08';
+var flickr_id = '';
+
+// 9. Adsense Channels
+var adsense_tag_to_channel_name = {
+    'node': 'sa-topic-node-js',
+    'javascript': 'sa-topic-javascript',
+    'python': 'sa-topic-python',
+    'java': 'sa-topic-java',
+    'machine learning': 'sa-topic-machine-learning',
+    'artificial intelligence': 'sa-topic-ai',
+    'tensorflow': 'sa-topic-tensorflow',
+    'scikit-learn': 'sa-topic-scikit-learn',
+    'algorithms': 'sa-topic-algorithms',
+    'data structures': 'sa-topic-data-structures',
+    'aws': 'sa-topic-aws',
+    'apache': 'sa-topic-apache',
+    'django': 'sa-topic-django',
+    'flask': 'sa-topic-flask',
+    'shell': 'sa-topic-shell',
+    'bash': 'sa-topic-bash',
+    'npm': 'sa-topic-npm',
+    'unix': 'sa-topic-unix',
+    'linux': 'sa-topic-linux',
+    'json': 'sa-topic-json',
+    'maven': 'sa-topic-maven',
+    'web framework': 'sa-topic-web-framework',
+    'security': 'sa-topic-security',
+    'arduino': 'sa-topic-arduino',
+    'express': 'sa-topic-express-js',
+    'es6': 'sa-topic-es6',
+    'mongodb': 'sa-topic-mongodb',
+    'how to': 'sa-topic-how-to',
+};
+var adsense_author_to_channel_name = {
+    'Scott Robinson': 'sa-author-scott-robinson',
+    'Frank Hofmann': 'sa-author-frank-hofmann',
+    'Adam McQuistan': 'sa-author-adam-mcquistan',
+    'Tendai Mutunhire': 'sa-author-tendai-mutunhire',
+    'Guest Contributor': 'sa-author-guest-contributor',
+    'Mihajlo Pavloski': 'sa-author-mihajlo-pavloski',
+    'Esther Vaati': 'sa-author-esther-vaati',
+    'Adnan Rahic': 'sa-author-adnan-rahic',
+    'Sam Galizia': 'sa-author-sam-galizia',
+};
+var adsense_channel_name_to_id = {
+    'sa-author-scott-robinson': '5091228512',
+    'sa-author-frank-hofmann': '5574923176',
+    'sa-author-adam-mcquistan': '5470502461',
+    'sa-author-tendai-mutunhire': '4157420794',
+    'sa-author-guest-contributor': '9218175780',
+    'sa-author-mihajlo-pavloski': '2081921796',
+    'sa-author-esther-vaati': '9026604091',
+    'sa-author-adnan-rahic': '5829595117',
+    'sa-author-sam-galizia': '1890350103',
+    'sa-topic-node-js': '9234966588',
+    'sa-topic-javascript': '4871736666',
+    'sa-topic-python': '6017776300',
+    'sa-topic-java': '4704694632',
+    'sa-topic-machine-learning': '2618830613',
+    'sa-topic-ai': '7679585600',
+    'sa-topic-tensorflow': '2325943302',
+    'sa-topic-scikit-learn': '8801095589',
+    'sa-topic-algorithms': '9664898345',
+    'sa-topic-data-structures': '8884856065',
+    'sa-topic-aws': '6294351744',
+    'sa-topic-apache': '4220999970',
+    'sa-topic-django': '2399338763',
+    'sa-topic-flask': '3357197212',
+    'sa-topic-shell': '7386698293',
+    'sa-topic-bash': '6588621943',
+    'sa-topic-npm': '8417952206',
+    'sa-topic-unix': '4912578190',
+    'sa-topic-linux': '4029428281',
+    'sa-topic-json': '7104870536',
+    'sa-topic-maven': '2286414858',
+    'sa-topic-web-framework': '4321551251',
+    'sa-topic-security': '8660251512',
+    'sa-topic-arduino': '2649376939',
+    'sa-topic-express-js': '3008469582',
+    'sa-topic-es6': '3447453289',
+    'sa-topic-mongodb': '9382306243',
+    'sa-topic-how-to': '5443061231',
+    'sa-position-sidebar-top': '9190734552',
+    'sa-position-sidebar-middle': '5600217174',
+    'sa-position-sidebar-bottom': '3770886911',
+    'sa-position-content-top': '4789698384',
+    'sa-position-content-middle': '7686081194',
+    'sa-position-content-bottom': '4576223195',
+};
+</script>    <link rel="canonical" href="https://stackabuse.com/implementing-svm-and-kernel-svm-with-pythons-scikit-learn/" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    
+    <meta property="og:site_name" content="Stack Abuse" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Implementing SVM and Kernel SVM with Python&#x27;s Scikit-Learn" />
+    <meta property="og:description" content="A support vector machine (SVM) is a type of supervised machine learning classification algorithm. SVMs were introduced initially in 1960s and were later refined in 1990s. However, it is only now that they are becoming extremely popular, owing to their ability to achieve brilliant results. SVMs are implemented in a" />
+    <meta property="og:url" content="https://stackabuse.com/implementing-svm-and-kernel-svm-with-pythons-scikit-learn/" />
+    <meta property="article:published_time" content="2018-04-17T15:10:14.000Z" />
+    <meta property="article:modified_time" content="2018-04-18T17:00:49.000Z" />
+    <meta property="article:tag" content="python" />
+    <meta property="article:tag" content="scikit-learn" />
+    <meta property="article:tag" content="machine learning" />
+    <meta property="article:tag" content="svm" />
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Implementing SVM and Kernel SVM with Python&#x27;s Scikit-Learn" />
+    <meta name="twitter:description" content="A support vector machine (SVM) is a type of supervised machine learning classification algorithm. SVMs were introduced initially in 1960s and were later refined in 1990s. However, it is only now that they are becoming extremely popular, owing to their ability to achieve brilliant results. SVMs are implemented in a" />
+    <meta name="twitter:url" content="https://stackabuse.com/implementing-svm-and-kernel-svm-with-pythons-scikit-learn/" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Usman Malik" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="python, scikit-learn, machine learning, svm" />
+    <meta name="twitter:site" content="@ScottWRobinson" />
+    <meta name="twitter:creator" content="@usman_malikk" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Stack Abuse",
+        "logo": "https://stackabuse.com/ghost/img/ghosticon.jpg"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Usman Malik",
+        "image": "https://stackabuse.com/content/images/2018/04/pic3.jpg",
+        "url": "https://stackabuse.com/author/usman/",
+        "sameAs": [
+            "https://twitter.com/usman_malikk"
+        ],
+        "description": "Programmer  | Blogger | Data Science Enthusiast | PhD To Be | Arsenal FC for Life"
+    },
+    "headline": "Implementing SVM and Kernel SVM with Python&#x27;s Scikit-Learn",
+    "url": "https://stackabuse.com/implementing-svm-and-kernel-svm-with-pythons-scikit-learn/",
+    "datePublished": "2018-04-17T15:10:14.000Z",
+    "dateModified": "2018-04-18T17:00:49.000Z",
+    "keywords": "python, scikit-learn, machine learning, svm",
+    "description": "A support vector machine (SVM) is a type of supervised machine learning classification algorithm. SVMs were introduced initially in 1960s and were later refined in 1990s. However, it is only now that they are becoming extremely popular, owing to their ability to achieve brilliant results. SVMs are implemented in a"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.9" />
+    <link rel="alternate" type="application/rss+xml" title="Stack Abuse" href="https://stackabuse.com/rss/" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.js"></script>
+</head>
+<body class="post-template tag-python tag-scikit-learn tag-machine-learning tag-svm">
+    <!-- <style type="text/css" media="screen">
+         div#banner { 
+           color: #ffffff;
+           position: fixed;
+           top: 0;
+           left: 0;
+           background-color: #404040;
+           width: 100%;
+           z-index: 1;
+         }
+         div#banner-content { 
+           width: 100%; 
+           margin: 0 auto; 
+           padding: 5px; 
+         }
+         .btn-primary-outline {
+           color: #ffffff;
+           background-color: transparent;
+           border-color: #ffffff;
+           border-radius: 3px;
+         }
+         .btn-primary-outline:hover {
+           color: #cccccc;
+           background-color: transparent;
+           border-color: #ffffff;
+           border-radius: 3px;
+         }
+    </style>
+    <div id="banner">
+        <div id="banner-content" class="text-center">
+            <span style="margin-right: 10px;">Post your job to 500K+ developers for only $99</span>
+            <a class="btn btn-lg btn-primary-outline" href="#"
+                data-toggle="modal"
+                data-target="#jobModal"
+                ga-on="click"
+                ga-event-category="Jobs"
+                ga-event-action="Click"
+                ga-event-label="Stack-Abuse-Post-Job"
+            >
+                <span class="glyphicon glyphicon-briefcase"></span>
+                &nbsp;
+                Post a Job
+            </a>
+        </div>
+    </div> -->
+
+	<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <i class="fa fa-bars"></i>
+      </button>
+      <a class="navbar-brand" href="/">Stack <span style="color:#f16334;">Abuse</span></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+	<li class="nav-nodejs" role="presentation"><a href="https://stackabuse.com/tag/node/">Node.js</a></li>
+	<li class="nav-python" role="presentation"><a href="https://stackabuse.com/tag/python">Python</a></li>
+	<li class="nav-java" role="presentation"><a href="https://stackabuse.com/tag/java/">Java</a></li>
+	<li class="nav-learn-nodejs" role="presentation"><a href="https://stackabuse.com/learn-node-js-a-beginners-guide/">Learn Node.js</a></li>
+</ul>
+      <!--<ul class="nav navbar-nav pull-right">
+        <li role="presentation">
+          <a class="btn btn-success nav-btn" href="http://jobs.stackabuse.com">Find a Job</a>
+        </li>
+        <li role="presentation">
+          <a class="btn btn-danger nav-btn" href="http://jobs.stackabuse.com/post">Post a Job</a>
+        </li>
+      </ul>-->
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+    <!-- BuySellAds Ad Code -->
+<script type="text/javascript">
+(function(){
+  var bsa = document.createElement('script');
+     bsa.type = 'text/javascript';
+     bsa.async = true;
+     bsa.src = '//s3.buysellads.com/ac/bsa.js';
+  (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa);
+})();
+</script>
+<!-- End BuySellAds Ad Code -->
+	<!-- start site's main content area -->
+<section class="content-wrap">
+	<div class="container">
+		<div class="row">
+			<!-- start main post area -->
+			<div class="col-md-8 main-content">
+				<!-- start post -->
+				<article id="183" class="post tag-python tag-scikit-learn tag-machine-learning tag-svm">
+					<div class="post-head">
+						<h2 class="post-title">Implementing SVM and Kernel SVM with Python&#x27;s Scikit-Learn</h2>
+						<div class="post-meta">
+							<span class="author">
+                                By
+                                <a rel="nofollow" target="_blank" href="https://twitter.com/usman_malikk">
+                                    <i class="fa fa-twitter" style="color:#55acee;"></i>
+                                    Usman Malik
+                                </a>
+                            </span> &bull;
+							<span class="date">April 17, 2018</span> &bull;
+							<span class="comment-count"><a href="/implementing-svm-and-kernel-svm-with-pythons-scikit-learn/#disqus_thread">0 Comments</a></span>
+						</div>
+					</div>
+                    <div class="post-ad">
+                        <!-- 728x90/320x50 -->
+<div id="waldo-tag-3878"></div>                    </div>
+					<div class="post-content">
+						<p>A <a rel="nofollow" target="_blank" href="https://en.wikipedia.org/wiki/Support_vector_machine">support vector machine</a> (SVM) is a type of supervised machine learning classification algorithm. SVMs were introduced initially in 1960s and were later refined in 1990s. However, it is only now that they are becoming extremely popular, owing to their ability to achieve brilliant results. SVMs are implemented in a unique way when compared to other machine learning algorithms.</p>
+
+<p>In this article we'll see what support vector machines algorithms are, the brief theory behind support vector machine and their implementation in Python's Scikit-Learn library. We will then move towards an advanced SVM concept, known as Kernel SVM, and will also implement it with the help of Scikit-Learn.</p>
+
+<h3 id="simplesvm">Simple SVM</h3>
+
+<p>In case of linearly separable data in two dimensions, as shown in Fig. 1, a typical machine learning algorithm tries to find a boundary that divides the data in such a way that the misclassification error can be minimized. If you closely look at Fig. 1, there can be several boundaries that correctly divide the data points. The two dashed lines as well as one solid line classify the data correctly.</p>
+
+<p><img class="img-responsive" alt="Multiple Decision Boundaries" src="https://s3.amazonaws.com/stackabuse/media/implementing-svm-kernel-svm-python-scikit-learn-1.jpg"></p>
+
+<p><em>Fig 1: Multiple Decision Boundaries</em></p>
+
+<p>SVM differs from the other classification algorithms in the way that it chooses the <a rel="nofollow" target="_blank" href="https://en.wikipedia.org/wiki/Decision_boundary">decision boundary</a> that maximizes the distance from the nearest data points of all the classes. An SVM doesn't merely find a decision boundary; it finds the most optimal decision boundary.</p>
+
+<p>The most optimal decision boundary is the one which has maximum margin from the nearest points of all the classes. The nearest points from the decision boundary that maximize the distance between the decision boundary and the points are called support vectors as seen in Fig 2. The decision boundary in case of support vector machines is called the maximum margin classifier, or the maximum margin hyper plane.</p>
+
+<p><img class="img-responsive" alt="Decision Boundary with Support Vectors" src="https://s3.amazonaws.com/stackabuse/media/implementing-svm-kernel-svm-python-scikit-learn-2.jpg"></p>
+
+<p><em>Fig 2: Decision Boundary with Support Vectors</em></p>
+
+<p>There is complex mathematics involved behind finding the support vectors, calculating the margin between decision boundary and the support vectors and maximizing this margin. In this tutorial we will not go into the detail of the mathematics, we will rather see how SVM and Kernel SVM are implemented via the Python Scikit-Learn library.</p>
+
+<h3 id="implementingsvmwithscikitlearn">Implementing SVM with Scikit-Learn</h3>
+
+<p>The dataset that we are going to use in this section is the same that we used in the classification section of the <a href="/decision-trees-in-python-with-scikit-learn/">decision tree tutorial</a>.</p>
+
+<p>Our task is to predict whether a bank currency note is authentic or not based upon four attributes of the note i.e. skewness of the wavelet transformed image, variance of the image, entropy of the image, and curtosis of the image. This is a binary classification problem and we will use SVM algorithm to solve this problem. The rest of the section consists of standard machine learning steps.</p>
+
+<h4 id="importinglibraries">Importing libraries</h4>
+
+<p>The following script imports required libraries:</p>
+
+<pre><code class="language-python">import pandas as pd  
+import numpy as np  
+import matplotlib.pyplot as plt  
+%matplotlib inline
+</code></pre>
+
+<h4 id="importingthedataset">Importing the Dataset</h4>
+
+<p>The data is available for download at the following link:</p>
+
+<p><a rel="nofollow" target="_blank" href="https://drive.google.com/file/d/13nw-uRXPY8XIZQxKRNZ3yYlho-CYm_Qt/view">https://drive.google.com/file/d/13nw-uRXPY8XIZQxKRNZ3yYlho-CYm_Qt/view</a></p>
+
+<p>The detailed information about the data is available at the following link:</p>
+
+<p><a rel="nofollow" target="_blank" href="https://archive.ics.uci.edu/ml/datasets/banknote+authentication">https://archive.ics.uci.edu/ml/datasets/banknote+authentication</a></p>
+
+<p>Download the dataset from the Google drive link and store it locally on your machine. For this example the CSV file for the dataset is stored in the "Datasets" folder of the D drive on my Windows computer. The script reads the file from this path. You can change the file path for your computer accordingly.</p>
+
+<p>To read data from CSV file, the simplest way is to use <code>read_csv</code> method of the pandas library. The following code reads bank currency note data into pandas dataframe:</p>
+
+<pre><code class="language-python">bankdata = pd.read_csv("D:/Datasets/bill_authentication.csv")  
+</code></pre>
+
+<h4 id="exploratorydataanalysis">Exploratory Data Analysis</h4>
+
+<p>There are virtually limitless ways to analyze datasets with a variety of Python libraries. For the sake of simplicity we will only check the dimensions of the data and see first few records. To see the rows and columns and of the data, execute the following command:</p>
+
+<pre><code class="language-python">bankdata.shape  
+</code></pre>
+
+<p>In the output you will see (1372,5). This means that the bank note dataset has 1372 rows and 5 columns.</p>
+
+<p>To get a feel of how our dataset actually looks, execute the following command:</p>
+
+<pre><code class="language-python">bankdata.head()  
+</code></pre>
+
+<p>The output will look like this:</p>
+
+<table class="table table-striped">  
+    <thead>
+        <tr>
+            <th></th>
+            <th>Variance</th>
+            <th>Skewness</th>
+            <th>Curtosis</th>
+            <th>Entropy</th>
+            <th>Class</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td>3.62160</td>
+            <td>8.6661</td>
+            <td>-2.8073</td>
+            <td>-0.44699</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>4.54590</td>
+            <td>8.1674</td>
+            <td>-2.4586</td>
+            <td>-1.46210</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>3.86600</td>
+            <td>-2.6383</td>
+            <td>1.9242</td>
+            <td>0.10645</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>3.45660</td>
+            <td>9.5228</td>
+            <td>-4.0112</td>
+            <td>-3.59440</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>0.32924</td>
+            <td>-4.4552</td>
+            <td>4.5718</td>
+            <td>-0.98880</td>
+            <td>0</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>You can see that all of the attributes in the dataset are numeric. The label is also numeric i.e. 0 and 1.</p>
+
+<h4 id="datapreprocessing">Data Preprocessing</h4>
+
+<p>Data preprocessing involves (1) Dividing the data into attributes and labels and (2) dividing the data into training and testing sets. </p>
+
+<p>To divide the data into attributes and labels, execute the following code:</p>
+
+<pre><code class="language-python">X = bankdata.drop('Class', axis=1)  
+y = bankdata['Class']  
+</code></pre>
+
+<p>In the first line of the script above, all the columns of the <code>bankdata</code> dataframe are being stored in the <code>X</code> variable except the "Class" column, which is the label column. The <code>drop()</code> method drops this column.</p>
+
+<p>In the second line, only the class column is being stored in the <code>y</code> variable. At this point of time <code>X</code> variable contains attributes while <code>y</code> variable contains corresponding labels.</p>
+
+<p>Once the data is divided into attributes and labels, the final preprocessing step is to divide data into training and test sets. Luckily, the <code>model_selection</code> library of the Scikit-Learn library contains the <code>train_test_split</code> method that allows us to seamlessly divide data into training and test sets.</p>
+
+<p>Execute the following script to do so:</p>
+
+<pre><code class="language-python">from sklearn.model_selection import train_test_split  
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20)  
+</code></pre>
+
+<h4 id="trainingthealgorithm">Training the Algorithm</h4>
+
+<p>We have divided the data into training and testing sets. Now is the time to train our SVM on the training data. Scikit-Learn contains the <code>svm</code> library, which contains built-in classes for different SVM algorithms. Since we are going to perform a classification task, we will use the support vector classifier class, which is written as <code>SVC</code> in the Scikit-Learn's <code>svm</code> library. This class takes one parameter, which is the kernel type. This is very important. In the case of a simple SVM we simply set this parameter as "linear" since simple SVMs can only classify linearly separable data. We will see non-linear kernels in the next section.</p>
+
+<p>The <code>fit</code> method of SVC class is called to train the algorithm on the training data, which is passed as a parameter to the <code>fit</code> method. Execute the following code to train the algorithm:</p>
+
+<pre><code class="language-python">from sklearn.svm import SVC  
+svclassifier = SVC(kernel='linear')  
+svclassifier.fit(X_train, y_train)  
+</code></pre>
+
+<h4 id="makingpredictions">Making Predictions</h4>
+
+<p>To make predictions, the <code>predict</code> method of the <code>SVC</code> class is used. Take a look at the following code:</p>
+
+<pre><code class="language-python">y_pred = svclassifier.predict(X_test)  
+</code></pre>
+
+<h4 id="evaluatingthealgorithm">Evaluating the Algorithm</h4>
+
+<p>Confusion matrix, precision, recall, and F1 measures are the most commonly used metrics for classification tasks. Scikit-Learn's <code>metrics</code> library contains the <code>classification_report</code> and <code>confusion_matrix</code> methods, which can be readily used to find out the values for these important metrics.</p>
+
+<p>Here is the code for finding these metrics:</p>
+
+<pre><code class="language-python">from sklearn.metrics import classification_report, confusion_matrix  
+print(confusion_matrix(y_test,y_pred))  
+print(classification_report(y_test,y_pred))  
+</code></pre>
+
+<h4 id="results">Results</h4>
+
+<p>The evaluation results are as follows:</p>
+
+<pre><code>[[152    0]
+ [  1  122]]
+              precision   recall   f1-score   support
+
+           0       0.99     1.00       1.00       152
+           1       1.00     0.99       1.00       123
+
+avg / total        1.00     1.00       1.00       275  
+</code></pre>
+
+<p>From the results it can be observed that SVM slightly outperformed the decision tree algorithm. There is only one misclassification in the case of SVM algorithm compared to four misclassifications in the case of the decision tree algorithm.</p>
+
+<h3 id="kernelsvm">Kernel SVM</h3>
+
+<p>In the previous section we saw how the simple SVM algorithm can be used to find decision boundary for linearly separable data. However, in the case of non-linearly separable data, such as the one shown in Fig. 3, a straight line cannot be used as a decision boundary. </p>
+
+<p><img class="img-responsive" alt="Non-linearly Separable Data" src="https://s3.amazonaws.com/stackabuse/media/implementing-svm-kernel-svm-python-scikit-learn-3.jpg"></p>
+
+<p>Fig 3: Non-linearly Separable Data</p>
+
+<p>In case of non-linearly separable data, the simple SVM algorithm cannot be used. Rather, a modified version of SVM, called Kernel SVM, is used.</p>
+
+<p>Basically, the kernel SVM projects the non-linearly separable data lower dimensions to linearly separable data in higher dimensions in such a way that data points belonging to different classes are allocated to different dimensions. Again, there is complex mathematics involved in this, but you do not have to worry about it in order to use SVM. Rather we can simply use Python's Scikit-Learn library that to implement and use the kernel SVM.</p>
+
+<h3 id="implementingkernelsvmwithscikitlearn">Implementing Kernel SVM with Scikit-Learn</h3>
+
+<p>Implementing Kernel SVM with Scikit-Learn is similar to the simple SVM. In this section, we will use the famous <a rel="nofollow" target="_blank" href="https://en.wikipedia.org/wiki/Iris_flower_data_set">iris dataset</a> to predict the category to which a plant belongs based on four attributes: sepal-width, sepal-length, petal-width and petal-length.</p>
+
+<p>The dataset can be downloaded from the following link:</p>
+
+<p><a rel="nofollow" target="_blank" href="https://archive.ics.uci.edu/ml/datasets/iris4">https://archive.ics.uci.edu/ml/datasets/iris4</a></p>
+
+<p>The rest of the steps are typical machine learning steps and need very little explanation until we reach the part where we train our Kernel SVM.</p>
+
+<h4 id="importinglibraries">Importing Libraries</h4>
+
+<pre><code class="language-python">import numpy as np  
+import matplotlib.pyplot as plt  
+import pandas as pd  
+</code></pre>
+
+<h4 id="importingthedataset">Importing the Dataset</h4>
+
+<pre><code class="language-python">url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+
+# Assign colum names to the dataset
+colnames = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'Class']
+
+# Read dataset to pandas dataframe
+irisdata = pd.read_csv(url, names=colnames)  
+</code></pre>
+
+<h4 id="preprocessing">Preprocessing</h4>
+
+<pre><code class="language-python">X = irisdata.drop('Class', axis=1)  
+y = irisdata['Class']  
+</code></pre>
+
+<h4 id="traintestsplit">Train Test Split</h4>
+
+<pre><code class="language-python">from sklearn.model_selection import train_test_split  
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20)  
+</code></pre>
+
+<h4 id="trainingthealgorithm">Training the Algorithm</h4>
+
+<p>To train the kernel SVM, we use the same <code>SVC</code> class of the Scikit-Learn's <code>svm</code> library. The difference lies in the value for the kernel parameter of the <code>SVC</code> class. In the case of the simple SVM we used "linear" as the value for the kernel parameter. However, for kernel SVM you can use Gaussian, polynomial, sigmoid, or computable kernel. We will implement polynomial, Gaussian, and sigmoid kernels to see which one works better for our problem.</p>
+
+<h4 id="1polynomialkernel">1. Polynomial Kernel</h4>
+
+<p>In the case of <a rel="nofollow" target="_blank" href="https://en.wikipedia.org/wiki/Polynomial_kernel">polynomial kernel</a>, you also have to pass a value for the <code>degree</code> parameter of the <code>SVC</code> class. This basically is the degree of the polynomial. Take a look at how we can use a polynomial kernel to implement kernel SVM:</p>
+
+<pre><code class="language-python">from sklearn.svm import SVC  
+svclassifier = SVC(kernel='poly', degree=8)  
+svclassifier.fit(X_train, y_train)  
+</code></pre>
+
+<h4 id="makingpredictions">Making Predictions</h4>
+
+<p>Now once we have trained the algorithm, the next step is to make predictions on the test data.</p>
+
+<p>Execute the following script to do so:</p>
+
+<pre><code class="language-python">y_pred = svclassifier.predict(X_test)  
+</code></pre>
+
+<h4 id="evaluatingthealgorithm">Evaluating the Algorithm</h4>
+
+<p>As usual, the final step of any machine learning algorithm is to make evaluations for polynomial kernel. Execute the following script:</p>
+
+<pre><code class="language-python">from sklearn.metrics import classification_report, confusion_matrix  
+print(confusion_matrix(y_test, y_pred))  
+print(classification_report(y_test, y_pred))  
+</code></pre>
+
+<p>The output for the kernel SVM using polynomial kernel looks like this:</p>
+
+<pre><code>[[11  0  0]
+ [ 0 12  1]
+ [ 0  0  6]]
+                 precision   recall   f1-score   support
+
+    Iris-setosa       1.00     1.00       1.00        11
+Iris-versicolor       1.00     0.92       0.96        13  
+ Iris-virginica       0.86     1.00       0.92         6
+
+    avg / total       0.97     0.97       0.97        30
+</code></pre>
+
+<p>Now let's repeat the same steps for Gaussian and sigmoid kernels.</p>
+
+<h4 id="2gaussiankernel">2. Gaussian Kernel</h4>
+
+<p>Take a look at how we can use polynomial kernel to implement kernel SVM:</p>
+
+<pre><code class="language-python">from sklearn.svm import SVC  
+svclassifier = SVC(kernel='rbf')  
+svclassifier.fit(X_train, y_train)  
+</code></pre>
+
+<p>To use Gaussian kernel, you have to specify 'rbf' as value for the Kernel parameter of the SVC class. </p>
+
+<h4 id="predictionandevaluation">Prediction and Evaluation</h4>
+
+<pre><code class="language-python">y_pred = svclassifier.predict(X_test)  
+</code></pre>
+
+<pre><code class="language-python">from sklearn.metrics import classification_report, confusion_matrix  
+print(confusion_matrix(y_test, y_pred))  
+print(classification_report(y_test, y_pred))  
+</code></pre>
+
+<p>The output of the Kernel SVM with Gaussian kernel looks like this:</p>
+
+<pre><code>[[11  0  0]
+ [ 0 13  0]
+ [ 0  0  6]]
+                 precision   recall   f1-score   support
+
+    Iris-setosa       1.00     1.00       1.00        11
+Iris-versicolor       1.00     1.00       1.00        13  
+ Iris-virginica       1.00     1.00       1.00         6
+
+    avg / total       1.00     1.00       1.00        30
+</code></pre>
+
+<h4 id="3sigmoidkernel">3. Sigmoid Kernel</h4>
+
+<p>Finally, let's use a sigmoid kernel for implementing Kernel SVM. Take a look at the following script:</p>
+
+<pre><code class="language-python">from sklearn.svm import SVC  
+svclassifier = SVC(kernel='sigmoid')  
+svclassifier.fit(X_train, y_train)  
+</code></pre>
+
+<p>To use the sigmoid kernel, you have to specify 'sigmoid' as value for the <code>kernel</code> parameter of the <code>SVC</code> class. </p>
+
+<h4 id="predictionandevaluation">Prediction and Evaluation</h4>
+
+<pre><code class="language-python">y_pred = svclassifier.predict(X_test)  
+</code></pre>
+
+<pre><code class="language-python">from sklearn.metrics import classification_report, confusion_matrix  
+print(confusion_matrix(y_test, y_pred))  
+print(classification_report(y_test, y_pred))  
+</code></pre>
+
+<p>The output of the Kernel SVM with Sigmoid kernel looks like this:</p>
+
+<pre><code>[[ 0  0 11]
+ [ 0  0 13]
+ [ 0  0  6]]
+                 precision   recall   f1-score   support
+
+    Iris-setosa       0.00     0.00       0.00        11
+Iris-versicolor       0.00     0.00       0.00        13  
+ Iris-virginica       0.20     1.00       0.33         6
+
+    avg / total       0.04     0.20       0.07        30
+</code></pre>
+
+<h4 id="comparisonofkernelperformance">Comparison of Kernel Performance</h4>
+
+<p>If we compare the performance of the different types of kernels we can clearly see that the sigmoid kernel performs the worst. This is due to the reason that sigmoid function returns two values, 0 and 1, therefore it is more suitable for binary classification problems. However, in our case we had three output classes.</p>
+
+<p>Amongst the Gaussian kernel and polynomial kernel, we can see that Gaussian kernel achieved a perfect 100% prediction rate while polynomial kernel misclassified one instance. Therefore the Gaussian kernel performed slightly better. However, there is no hard and fast rule as to which kernel performs best in every scenario. It is all about testing all the kernels and selecting the one with the best results on your test dataset. </p>
+
+<h3 id="resources">Resources</h3>
+
+<p>Want to learn more about Scikit-Learn and other useful machine learning algorithms? I'd recommend checking out some more detailed resources, like an online course:</p>
+
+<ul>
+<li><a class="udemy-link" rel="nofollow" target="_blank" href="http://stackabu.se/python-data-science-machine-learning-bootcamp">Python for Data Science and Machine Learning Bootcamp</a></li>
+<li><a class="udemy-link" rel="nofollow" target="_blank" href="http://stackabu.se/machine-learning-hands-on-python-data-science">Machine Learning A-Z: Hands-On Python &amp; R In Data Science</a></li>
+<li><a class="udemy-link" rel="nofollow" target="_blank" href="http://stackabu.se/data-science-python-pandas-sklearn-numpy">Data Science in Python, Pandas, Scikit-learn, Numpy, Matplotlib</a></li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>In this article we studied both simple and kernel SVMs. We studied the intuition behind the SVM algorithm and how it can be implemented with Python's Scikit-Learn library. We also studied different types of kernels that can be used to implement kernel SVM. I would suggest you try to implement these algorithms on real-world datasets available at places like <a rel="nofollow" target="_blank" href="https://www.kaggle.com">kaggle.com</a>.</p>
+
+<p>I would also suggest that you explore the actual mathematics behind the SVM. Although you are not necessarily going to need it in order to use the SVM algorithm, it is still very handy to know what is actually going on behind the scene while your algorithm is finding decision boundaries.</p>
+					</div>
+					<footer class="post-footer clearfix">
+						<div class="pull-left tag-list">
+							<i class="fa fa-folder-open-o"></i>
+							<a href="/tag/python/">python</a>,<a href="/tag/scikit-learn/">scikit-learn</a>,<a href="/tag/machine-learning/">machine learning</a>,<a href="/tag/svm/">svm</a>
+						</div>
+						<div class="pull-right share">
+							<div>
+	<ul class="share-icons">
+		<!-- twitter -->
+		<li>
+			<a href="https://twitter.com/share?text=Implementing%20SVM%20and%20Kernel%20SVM%20with%20Python's%20Scikit-Learn&amp;url=https://stackabuse.com/implementing-svm-and-kernel-svm-with-pythons-scikit-learn/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;"><i class="fa fa-twitter" style="color:#55acee;"></i></a>
+		</li>
+		<!-- facebook -->
+		<li>
+			<a href="https://www.facebook.com/sharer/sharer.php?u=https://stackabuse.com/implementing-svm-and-kernel-svm-with-pythons-scikit-learn/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;"><i class="fa fa-facebook" style="color:#3b5998;"></i></a>
+		</li>
+		<!-- google plus -->
+		<li>
+			<a href="https://plus.google.com/share?url=https://stackabuse.com/implementing-svm-and-kernel-svm-with-pythons-scikit-learn/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;"><i class="fa fa-google-plus" style="color:#dc4e41;"></i></a>
+		</li>
+		<!-- linkedin -->
+		<li>
+			<a href="https://www.linkedin.com/shareArticle?mini=true%26url=https://stackabuse.com/implementing-svm-and-kernel-svm-with-pythons-scikit-learn/%26source=https://stackabuse.com" onclick="window.open(this.href, 'linkedin-share', 'width=490,height=530');return false;"><i class="fa fa-linkedin" style="color:#0077b5;"></i></a>
+		</li>
+	</ul>
+</div>						</div>
+					</footer>
+                    <!-- start about the author -->
+<div class="about-author clearfix">
+		<a href="/author/usman/"><img src="/content/images/2018/04/pic3.jpg" alt="Author image" class="avatar pull-left"></a>
+	<div class="details">
+		<div class="author">
+			About <a href="/author/usman/">Usman Malik</a>
+		</div>
+		<div class="meta-info" style="font-style: normal;">
+			<span class="location"><i class="fa fa-home"></i>Paris (France)</span>
+			<span>
+                <i class="fa fa-twitter" style="color:#55acee;"></i>
+                <a rel="nofollow" href="https://twitter.com/usman_malikk" target="_BLANK">Twitter</a>
+            </span>
+		</div>
+		<div class="bio">
+            Programmer  | Blogger | Data Science Enthusiast | PhD To Be | Arsenal FC for Life
+        </div>
+	</div>
+</div>
+<!-- end about the author -->				</article>
+                <!-- start newsletter section -->
+<div class="section">
+    <div class="newsletter text-center">
+        <h4 class="title">Subscribe to our Newsletter</h4>
+        <div class="content">        
+            <form action="#" method="post" class="form-inline validate" novalidate>
+                <div class="row">
+                    <div class="col-md-9 col-md-offset-1 col-xs-12">
+                        <p>Get occassional tutorials, guides, and reviews in your inbox. No spam ever. Unsubscribe at any time.</p>
+                    </div>
+                    <div class="col-md-2 col-xs-12"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7 col-md-offset-1 col-xs-12">
+                        <input type="email" value="" name="email" class="form-control input-lg required email" placeholder="Enter your email..." style="width:100%;">
+                    </div>
+                    <div class="col-md-4 col-xs-12 text-left">
+                        <button type="submit" name="subscribe" class="btn btn-default btn-lg btn-subscribe"
+                            ga-on="click"
+                            ga-event-category="Newsletter"
+                            ga-event-action="Signup"
+                            ga-event-label="General-Newsletter-Signup"
+                        >
+                            <i class="fa fa-spinner fa-pulse fa-fw" style="display:none;"></i>
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="message"></div>
+        </div>
+    </div>
+</div>
+<!-- end newsletter section -->				<div class="comment-wrap">
+					<!-- start disqus comment -->
+<div class="disqus-container">
+	<div id="disqus_thread"></div>
+	    <script type="text/javascript">
+	        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	        var disqus_shortname = disqus_shortname; // required: replace example with your forum shortname
+
+	        /* * * DON'T EDIT BELOW THIS LINE * * */
+	        (function() {
+	            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	        })();
+	    </script>
+	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+<!-- end disqus comment -->				</div>
+				<!-- start prev next wrap -->
+<div class="prev-next-wrap clearfix">
+		<a class="btn btn-default" href="/single-page-apps-with-vue-js-and-flask-deployment/"><i class="fa fa-angle-left fa-fw"></i> Previous Post : Single Page Apps with Vue.js and Flask: Deployment</a>
+		&nbsp;
+        <a class="btn btn-default" href="/basic-socket-programming-in-python/">Next Post : Basic Socket Programming in Python <i class="fa fa-angle-right fa-fw"></i></a>
+</div>				<!-- end post -->
+			</div>
+			<!-- end main post area -->
+			<!-- start sidebar -->
+<div class="col-md-4 sidebar">
+    <!-- start widget -->
+<div class="widget">
+	<h4 class="title">
+        Ad
+    </h4>
+    <div class="content ad" style="min-height: 250px;">
+        <!-- 300x250/300x600 -->
+<div id="waldo-tag-3874"></div>    </div>
+</div>
+<!-- end widget -->    <!-- start widget -->
+<div class="widget">
+    <h4 class="title">Follow Us</h4>
+    <div class="content social">
+        <div class="row">
+            <div class="col-md-4 col-xs-12">
+                <a rel="nofollow" target="_blank" href="https://twitter.com/StackAbuse" style="color: #38A1F3;">
+                    <i class="fa fa-twitter fa-lg"></i>
+                    Twitter
+                </a>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <a rel="nofollow" target="_blank" href="https://www.facebook.com/stackabuse" style="color: #3b5998;">
+                    <i class="fa fa-facebook fa-lg"></i>
+                    Facebook
+                </a>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <a target="_blank" href="https://stackabuse.com/rss/" style="color: #f7a000;">
+                    <i class="fa fa-rss fa-lg"></i>
+                    RSS
+                </a>
+            </div>
+        </div>
+        <!-- <ul class="social">
+            <li><a href="https://twitter.com/StackAbuse"><i class="fa fa-twitter fa-lg"></i></a></li>
+            <li><a href="https://www.facebook.com/stackabuse"><i class="fa fa-facebook fa-lg"></i></a></li>
+            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+            <li><a href="#"><i class="fa fa-skype"></i></a></li>
+            <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+            <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+            <li><a href="#"><i class="fa fa-vimeo-square"></i></a></li>
+            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+            <li><a href="#"><i class="fa fa-flickr"></i></a></li>
+            <li><a href="#"><i class="fa fa-tumblr"></i></a></li>
+            <li><a href="https://github.com/scottwrobinson"><i class="fa fa-github"></i></a></li>
+            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+            <li><a href="#"><i class="fa fa-stack-overflow"></i></a></li>
+            <li><a href="#"><i class="fa fa-stack-exchange"></i></a></li>
+            <li><a href="#"><i class="fa fa-xing"></i></a></li>
+            <li><a href="#"><i class="fa fa-envelope"></i></a></li>
+            <li><a href="https://stackabuse.com/rss/"><i class="fa fa-rss fa-lg"></i></a></li>
+        </ul> -->
+    </div>
+</div>
+<!-- end widget -->    <!-- start newsletter widget -->
+<div class="widget">
+    <h4 class="title">Newsletter</h4>
+    <div class="content newsletter">
+        <p style="font-size: 16px;">Subscribe to our newsletter! Get occassional tutorials, guides, and reviews in your inbox.</p>
+        <form action="#" method="post" class="validate" novalidate>
+            <div class="input-group">
+                <input type="email" value="" name="email" class="required email input-lg" placeholder="Enter your email...">
+            </div>
+            <div class="input-group">
+                <button type="submit" name="subscribe" class="btn btn-lg btn-default"
+                    ga-on="click"
+                    ga-event-category="Newsletter"
+                    ga-event-action="Signup"
+                    ga-event-label="General-Newsletter-Signup"
+                >
+                    <i class="fa fa-spinner fa-pulse fa-fw" style="display:none;"></i>
+                    Subscribe
+                </button>
+            </div>
+            <span style="color: #7f7f7f;">No spam ever. Unsubscribe at any time.</span>
+        </form>
+        <div class="message"></div>
+    </div>
+</div>
+<!-- end tag cloud widget -->    <!-- start widget -->
+<div class="widget">
+    <h4 class="title">
+        Ad
+    </h4>
+    <div class="content ad" style="min-height: 250px;">
+        <!-- 300x250/300x600 -->
+<div id="waldo-tag-3876"></div>    </div>
+</div>
+<!-- end widget -->    <div class="widget-sticky">
+        <!-- start widget -->
+<div class="widget">
+    <h4 class="title">Want a remote job?</h4>
+    <div class="content jobs">
+        <ul style="margin-bottom: 0px;">
+        </ul>
+        <div class="row" style="margin-right: -40px;">
+            <div class="col-md-3">
+                <strong>
+                    <!-- <a rel="nofollow" target="_blank"
+                        href="http://www.indeed.com/jobs?indpubnum=4838297301202088&chnl=stackabuse&q=programming"
+                        ga-on="click"
+                        ga-event-category="Jobs"
+                        ga-event-action="Click"
+                        ga-event-label="ZR-More-Jobs"
+                    >
+                        <i class="fa fa-arrow-circle-right"></i> More jobs
+                    </a> -->
+                    <a rel="nofollow" target="_blank" class="btn btn-default" href="https://hireremote.io" style="margin-top: 10px;">
+                        <i class="fa fa-arrow-circle-right"></i>&nbsp; More jobs
+                    </a>
+                </strong>
+            </div>
+            <!-- <div class="col-md-9 text-right">
+                <span>Jobs by</span>
+                <a
+                    rel="nofollow" target="_blank"
+                    href="https://www.ziprecruiter.com/jobs"
+                    id="jobs_widget_link"
+                    ga-on="click"
+                    ga-event-category="Jobs"
+                    ga-event-action="Click"
+                    ga-event-label="ZR-Jobs-By"
+                >
+                    <span id="zr_logo_container">
+                        <img
+                            id="zr_logo"
+                            src="https://www.ziprecruiter.com/img/logos/logo-sm-black-304px.png" alt="ZipRecruiter"
+                            width="100"
+                        />
+                    </span>
+                </a>
+            </div> -->
+        </div>
+    </div>
+</div>
+<!-- end widget -->        <!-- start widget -->
+<div class="widget">
+    <a rel="nofollow" target="_blank"
+       class="dcp-link"
+       href="http://stackabu.se/daily-coding-problem"
+       style="text-decoration: none;"
+    >
+        <h4 class="title">Interviewing for a job?</h4>
+    </a>
+    <div class="content product">
+        <style type="text/css">
+            #product-features li {
+                margin: 5px 0;
+            }
+        </style>
+        <div id="product-features" style="font-size: 16px;line-height: 1.7em;">
+            <ul style="list-style: initial;">
+                <li>
+                    Improve your skills by solving one coding problem every day
+                </li>
+                <li>
+                    Get the solutions the next morning via email
+                </li>
+                <li>
+                    Practice on <strong>actual problems</strong> asked by top companies, like:
+                    <div style="margin: 15px 0px;">
+                        <img src="/assets/images/logo-google.svg?v=98cf46a323" style="height: 18px;">
+                        &nbsp;
+                        <img src="/assets/images/logo-facebook.svg?v=98cf46a323" style="height: 14px;margin-bottom: 3px;">
+                        &nbsp;
+                        <img src="/assets/images/logo-amazon.svg?v=98cf46a323" style="height: 20px;">
+                        &nbsp;
+                        <img src="/assets/images/logo-microsoft.svg?v=98cf46a323" style="height: 20px;">
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <a rel="nofollow" target="_blank"
+                   class="btn btn-default dcp-link"
+                   href="http://stackabu.se/daily-coding-problem"
+                >
+                    <i class="fa fa-code"></i>
+                    &nbsp;
+                    Daily Coding Problem
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end widget -->    </div>
+</div>
+<!-- end sidebar -->		</div>
+	</div>
+</section>
+<!-- end site's main content area -->
+
+	<!-- start main-footer -->
+	<footer class="main-footer">
+		<div class="container">
+			<div class="row">
+				<!-- start first footer widget area -->
+				<div class="col-sm-4">
+					<!-- start widget -->
+<div class="widget">
+	<h4 class="title">Recent Posts</h4>
+	<div class="content recent-post"></div>
+</div>
+<!-- end widget -->				</div>
+				<!-- end first footer widget area -->
+				<!-- start second footer widget area -->
+				<div class="col-sm-4">
+					<!-- start tag cloud widget -->
+<div class="widget">
+	<h4 class="title">Tags</h4>
+	<div class="content tag-cloud"></div>
+</div>
+<!-- end tag cloud widget -->				</div>
+				<!-- end second footer widget area -->
+				<!-- start third footer widget area -->
+				<div class="col-sm-4">
+					<!-- start widget -->
+<div class="widget">
+    <h4 class="title">Follow Us</h4>
+    <div class="content social">
+        <div class="row">
+            <div class="col-md-4 col-xs-12">
+                <a rel="nofollow" target="_blank" href="https://twitter.com/StackAbuse" style="color: #38A1F3;">
+                    <i class="fa fa-twitter fa-lg"></i>
+                    Twitter
+                </a>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <a rel="nofollow" target="_blank" href="https://www.facebook.com/stackabuse" style="color: #3b5998;">
+                    <i class="fa fa-facebook fa-lg"></i>
+                    Facebook
+                </a>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <a target="_blank" href="https://stackabuse.com/rss/" style="color: #f7a000;">
+                    <i class="fa fa-rss fa-lg"></i>
+                    RSS
+                </a>
+            </div>
+        </div>
+        <!-- <ul class="social">
+            <li><a href="https://twitter.com/StackAbuse"><i class="fa fa-twitter fa-lg"></i></a></li>
+            <li><a href="https://www.facebook.com/stackabuse"><i class="fa fa-facebook fa-lg"></i></a></li>
+            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+            <li><a href="#"><i class="fa fa-skype"></i></a></li>
+            <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+            <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+            <li><a href="#"><i class="fa fa-vimeo-square"></i></a></li>
+            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+            <li><a href="#"><i class="fa fa-flickr"></i></a></li>
+            <li><a href="#"><i class="fa fa-tumblr"></i></a></li>
+            <li><a href="https://github.com/scottwrobinson"><i class="fa fa-github"></i></a></li>
+            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+            <li><a href="#"><i class="fa fa-stack-overflow"></i></a></li>
+            <li><a href="#"><i class="fa fa-stack-exchange"></i></a></li>
+            <li><a href="#"><i class="fa fa-xing"></i></a></li>
+            <li><a href="#"><i class="fa fa-envelope"></i></a></li>
+            <li><a href="https://stackabuse.com/rss/"><i class="fa fa-rss fa-lg"></i></a></li>
+        </ul> -->
+    </div>
+</div>
+<!-- end widget -->				</div>
+				<!-- end third footer widget area -->
+			</div>
+		</div>
+	</footer>
+	<!-- end main-footer -->
+	<!-- start copyright section -->
+<div class="copyright">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				Copyright &copy; 2019, <a href="https://stackabuse.com">Stack Abuse</a>.  All Right Reserved
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end copyright section -->	<div class="footer-links">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<a href="/disclosure">Disclosure</a>
+					•
+					<a href="/privacy-policy">Privacy Policy</a>
+					•
+					<a href="/terms-of-service">Terms of Service</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<a href="#" id="back-to-top"><i class="fa fa-angle-up"></i></a>
+	<!--
+<script src="//my.hellobar.com/4dd9990be00532b0fc7961824b7d7a0930e9e2b7.js" type="text/javascript" charset="utf-8" async="async"></script>
+-->
+	<!-- scripts -->
+	<script type="text/javascript">
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+    </script>
+
+    <!-- HTML templates for use in JS code -->
+    <script id="newsletter-template" type="text/x-custom-template">
+        <!-- start newsletter section -->
+<div class="section">
+    <div class="newsletter text-center">
+        <h4 class="title">Subscribe to our Newsletter</h4>
+        <div class="content">        
+            <form action="#" method="post" class="form-inline validate" novalidate>
+                <div class="row">
+                    <div class="col-md-9 col-md-offset-1 col-xs-12">
+                        <p>Get occassional tutorials, guides, and reviews in your inbox. No spam ever. Unsubscribe at any time.</p>
+                    </div>
+                    <div class="col-md-2 col-xs-12"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7 col-md-offset-1 col-xs-12">
+                        <input type="email" value="" name="email" class="form-control input-lg required email" placeholder="Enter your email..." style="width:100%;">
+                    </div>
+                    <div class="col-md-4 col-xs-12 text-left">
+                        <button type="submit" name="subscribe" class="btn btn-default btn-lg btn-subscribe"
+                            ga-on="click"
+                            ga-event-category="Newsletter"
+                            ga-event-action="Signup"
+                            ga-event-label="General-Newsletter-Signup"
+                        >
+                            <i class="fa fa-spinner fa-pulse fa-fw" style="display:none;"></i>
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="message"></div>
+        </div>
+    </div>
+</div>
+<!-- end newsletter section -->    </script>
+
+    <script src="/assets/js/jquery.adsenseloader.js?v=98cf46a323"></script>
+	<script src="/assets/js/jquery.fitvids.js?v=98cf46a323"></script>
+	<script src="/assets/js/bootstrap.min.js?v=98cf46a323"></script>
+	<script src="/assets/js/jflickrfeed.min.js?v=98cf46a323"></script>
+	<!-- <script src="/assets/js/highlight.pack.js?v=98cf46a323"></script> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.4.0/highlightjs-line-numbers.min.js"></script>
+	<!-- <script src="/assets/js/indeed.js?v=98cf46a323"></script> -->
+	<script src="/assets/js/main.js?v=98cf46a323"></script>
+	<!-- <script src="//gdc.indeed.com/ads/apiresults.js" type="text/javascript"></script> -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript" async></script>
+	<!-- Add your analytic code below -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  if (window.location.hostname !== 'localhost') {
+    ga('create', 'UA-43140675-1', 'auto');
+    ga('require', 'eventTracker');
+    ga('send', 'pageview');
+  }
+
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/autotrack/1.0.1/autotrack.js"></script></body>
+</html>

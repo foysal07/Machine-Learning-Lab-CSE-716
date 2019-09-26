@@ -1,0 +1,15 @@
+age,income,isStudent,creditRating,class:buysComputer
+youth,high,no,fair,no
+youth,high,no,excellent,no
+middleAged,high,no,fair,yes
+senior,medium,no,fair,yes
+senior,low,yes,fair,yes
+senior,low,yes,excellent,no
+middleAged,low,yes,excellent,yes
+youth,medium,no,fair,no
+youth,low,yes,fair,yes
+senior,medium,yes,fair,yes
+youth,medium,yes,excellent,yes
+middleAged,medium,no,excellent,yes
+middleAged,high,yes,fair,yes
+senior,medium,no,excellent,no

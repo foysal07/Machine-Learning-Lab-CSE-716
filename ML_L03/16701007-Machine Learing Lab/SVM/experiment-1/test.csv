@@ -1,0 +1,5 @@
+age,income,student,credit_rating,buysComputer
+youth,medium,yes,excellent,yes
+middleAged,medium,no,excellent,yes
+middleAged,high,yes,fair,yes
+senior,medium,no,excellent,no
